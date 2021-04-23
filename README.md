@@ -1,5 +1,5 @@
 <h1 style="color:#0000FF">READ ME!</h1>
-    <h3><strong>Proyecto PL SQL: Buques de la segunda guerra mundial</strong></h3>
+    <h3><strong>Proyecto PL/SQL: Buques de la segunda guerra mundial</strong></h3>
     <h5 style="color:#FF0000">LISTA DE ARCHIVOS Y DESCRICIÓN:</h5>
     <ul>
         <li><span style="color:#0000FF"><strong>BLOQUESANON.sql</strong></span> --> Script de prueba de las funcionalidades</li>
