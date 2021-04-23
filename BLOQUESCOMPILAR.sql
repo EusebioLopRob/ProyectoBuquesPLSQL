@@ -259,7 +259,7 @@ BEGIN
             :OLD.ACRONIMO_TIP||'#'||:OLD.ID_COM;
             v_tip:=3;
     END CASE;
-    INSERT INTO BARCO_AUDITORIA VALUES(USER,SYSTIMESTAMP,v_tip,v_reg_nuevo,v_reg_antiguo);
+    INSERT INTO BARCO_AUDITORIA VALUES(USER,TO_DATE((SELECT TO_CHAR(SYSTIMESTAMP,'DD/MM/YYYY HH24:MI:SS')FROM DUAL),'DD/MM/YYYY HH24:MI:SS'),v_tip,v_reg_nuevo,v_reg_antiguo);
     --Captura de excepciones inesperadas
     EXCEPTION
         WHEN OTHERS THEN
@@ -293,7 +293,7 @@ BEGIN
             v_reg_antiguo:=:OLD.ID_COM||'#'||:OLD.NOMBRE_COM||'#'||:OLD.RANGO||'#'||:OLD.FACCION_COM;
             v_tip:=3;
     END CASE;
-    INSERT INTO COMANDANTE_AUDITORIA VALUES(USER,SYSTIMESTAMP,v_tip,v_reg_nuevo,v_reg_antiguo);
+    INSERT INTO COMANDANTE_AUDITORIA VALUES(USER,TO_DATE((SELECT TO_CHAR(SYSTIMESTAMP,'DD/MM/YYYY HH24:MI:SS')FROM DUAL),'DD/MM/YYYY HH24:MI:SS'),v_tip,v_reg_nuevo,v_reg_antiguo);
     --Captura de excepciones inesperadas
     EXCEPTION
         WHEN OTHERS THEN
@@ -327,7 +327,7 @@ BEGIN
             v_reg_antiguo:=:OLD.CODIGO_CONT||'#'||:OLD.NOMBRE_CONT||'#'||:OLD.FECHA_CONT;
             v_tip:=3;
     END CASE;
-    INSERT INTO CONTIENDA_AUDITORIA VALUES(USER,SYSTIMESTAMP,v_tip,v_reg_nuevo,v_reg_antiguo);
+    INSERT INTO CONTIENDA_AUDITORIA VALUES(USER,TO_DATE((SELECT TO_CHAR(SYSTIMESTAMP,'DD/MM/YYYY HH24:MI:SS')FROM DUAL),'DD/MM/YYYY HH24:MI:SS'),v_tip,v_reg_nuevo,v_reg_antiguo);
     --Captura de excepciones inesperadas
     EXCEPTION
         WHEN OTHERS THEN
@@ -361,7 +361,7 @@ BEGIN
             v_reg_antiguo:=:OLD.CODIGO_BARCO||'#'||:OLD.CODIGO_CONT;
             v_tip:=3;
     END CASE;
-    INSERT INTO PARTICIPA_AUDITORIA VALUES(USER,SYSTIMESTAMP,v_tip,v_reg_nuevo,v_reg_antiguo);
+    INSERT INTO PARTICIPA_AUDITORIA VALUES(USER,TO_DATE((SELECT TO_CHAR(SYSTIMESTAMP,'DD/MM/YYYY HH24:MI:SS')FROM DUAL),'DD/MM/YYYY HH24:MI:SS'),v_tip,v_reg_nuevo,v_reg_antiguo);
     --Captura de excepciones inesperadas
     EXCEPTION
         WHEN OTHERS THEN
@@ -411,17 +411,17 @@ DECLARE
         MANGA NUMBER(5,2)
     );
     r_tambar TYPE_TAM;
-BEGIN
+BEGIN    
     --Recuperamos los valores medios del tipo de barco que pretendemos introducir mediante un cursor implícito
     SELECT AVG(ESLORA),AVG(CALADO),AVG(MANGA) INTO r_tamBar FROM BARCO WHERE ACRONIMO_TIP=:NEW.ACRONIMO_TIP;
     --Calculamos el tamaño relativo medio de los barcos del tipo que pretendemos introducir
     v_tamtip:=r_tambar.ESLORA*r_tambar.CALADO*r_tambar.MANGA;
-    v_resul:=v_tam/v_tamtip;
+    v_resul:=v_tam/v_tamtip;    
     --Dependiendo de si el porcentaje de tamaño relativo con respecto a la media es mayor o menor del 60% 
     --se lanzará la excepción adecuada, en caso de no darse ninguna, el trigger permite la inserción
     IF v_resul>1 AND (v_resul-1)>0.6 THEN
         RAISE_APPLICATION_ERROR(-20002,'No está permitido insertar '||:NEW.ACRONIMO_TIP||' con un tamaño relativo por encima del 60% de la media: '||v_tamtip||', revise los valores.');       
-    ELSIF v_resul<1 AND v_resul>0.6 THEN
+    ELSIF v_resul<1 AND v_resul<0.6 THEN
         RAISE_APPLICATION_ERROR(-20002,'No está permitido insertar '||:NEW.ACRONIMO_TIP||' con un tamaño relativo por debajo del 60% de la media: '||v_tamtip||', revise los valores.');        
     END IF;
 END T_TAMANOINCORRECTO;
