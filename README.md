@@ -14,4 +14,4 @@
         <li>Ejecutar el script de código compilable: <span style="color:#0000FF">BLOQUESCOMPILAR.sql</span></li></li>
         <li>Ejecutar paso a paso o por completo el script de prueba de funcionalidades: <span style="color:#0000FF">BLOQUESANON.sql</span></li>
     </ol>
-    <p><strong>NOTA: </strong>Dentro del propio scrpt de prueba hay instrucciones adicionales paso por paso</p>
+    <p><strong>NOTA: </strong>Dentro del propio script de prueba hay instrucciones adicionales paso por paso</p>
